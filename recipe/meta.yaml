@@ -24,7 +24,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
     - pkg-config
-    - meson  # analint: python_build_tools_in_host  # meson is the C build system here; AR keeps it in build (cf. harfbuzz, wayland)
+    - meson
     - ninja-base
   host:
     - libcap {{ libcap }}
