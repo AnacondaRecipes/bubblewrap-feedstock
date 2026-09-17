@@ -1,0 +1,54 @@
+{% set name = "bubblewrap" %}
+{% set version = "0.12.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/containers/bubblewrap/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 3f66d9e3f85396f6d7d7fbd2859f277e4fd3a9303341bfe2ff325251bda65fd4
+
+build:
+  number: 0
+  skip: true  # [not linux]
+  script: |
+    meson _builddir -Dselinux=disabled ${MESON_ARGS}
+    meson compile -C _builddir
+    meson test -C _builddir
+    meson install -C _builddir
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ stdlib('c') }}
+    - pkg-config
+    - meson  # analint: python_build_tools_in_host  # meson is the C build system here; AR keeps it in build (cf. harfbuzz, wayland)
+    - ninja-base
+  host:
+    - libcap {{ libcap }}
+
+test:
+  commands:
+    - bwrap --help
+
+about:
+  home: https://github.com/containers/bubblewrap
+  dev_url: https://github.com/containers/bubblewrap
+  doc_url: https://manpages.debian.org/testing/bubblewrap/bwrap.1.en.html
+  license: LGPL-2.1-or-later
+  license_family: LGPL
+  license_file: COPYING
+  summary: Unprivileged sandboxing tool
+  description: |
+    Bubblewrap is a low-level unprivileged sandboxing tool used by Flatpak and
+    similar projects. It creates a new mount namespace and bind-mounts only the
+    paths the caller allows, so a process can run with a restricted view of the
+    filesystem without requiring root privileges.
+
+extra:
+  recipe-maintainers:
+    - wolfv
+  # False positive: meson is the C build system here, not a Python host tool.
+  skip-lints:
+    - python_build_tools_in_host
