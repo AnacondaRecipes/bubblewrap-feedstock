@@ -15,7 +15,8 @@ build:
   script: |
     meson _builddir -Dselinux=disabled ${MESON_ARGS}
     meson compile -C _builddir
-    meson test -C _builddir
+    # test-sandbox.py exceeds meson's 30s default timeout on the slower linux-aarch64 workers
+    meson test -C _builddir --timeout-multiplier 10
     meson install -C _builddir
 
 requirements:
