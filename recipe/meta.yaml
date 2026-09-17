@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/containers/bubblewrap/archive/refs/tags/v{{ version }}.tar.gz
+  url: https://github.com/containers/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 3f66d9e3f85396f6d7d7fbd2859f277e4fd3a9303341bfe2ff325251bda65fd4
 
 build:
